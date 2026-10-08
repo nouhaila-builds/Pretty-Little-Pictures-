@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pretty Little Pictures</title>
+  <meta name="description" content="An independent study of visible-to-infrared generation when paired data are scarce.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Serif:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="fr" aria-pressed="false">Français</button>
+    </div>
+    <p class="kicker" data-en="Independent research case study · 2026" data-fr="Étude de cas de recherche indépendante · 2026"></p>
+    <h1>Pretty little pictures</h1>
+    <p class="lede" data-en="Looks can be deceiving — even to a machine." data-fr="L’apparence peut tromper — même une machine."></p>
+    <p class="lede" id="question" data-en="When a visible-to-infrared translator is trained on progressively fewer aligned pairs, do pixel fidelity, perceptual similarity, and pedestrian-detection utility degrade together?" data-fr="Lorsqu’un traducteur du visible vers l’infrarouge est entraîné sur de moins en moins de paires alignées, la fidélité pixel, la similarité perceptuelle et l’utilité pour la détection de piétons se dégradent-elles ensemble ?"></p>
+    <ul class="tags" id="tags"></ul>
+    <p class="pending-pill" id="status" data-en="Measured on the LLVIP test set" data-fr="Mesuré sur le jeu de test LLVIP"></p>
+  </header>
+
+  <section class="section why" id="why">
+    <p class="index" data-en="The title" data-fr="Le titre"></p>
+    <h2 data-en="Why “Pretty Little Pictures”?" data-fr="Pourquoi « Pretty Little Pictures » ?"></h2>
+    <div class="prose">
+      <p data-en="The title is intentionally a little ironic." data-fr="Le titre est volontairement un peu ironique."></p>
+      <p>
+        <span data-en="The generated infrared images are small — " data-fr="Les images infrarouges générées sont petites — "></span><strong>128 × 128</strong><span data-en=" pixels — and they are not necessarily visually convincing. But that is precisely the point: " data-fr=" pixels — et elles ne sont pas forcément convaincantes visuellement. C’est précisément le sujet : "></span><strong data-en="an image that looks plausible is not automatically an image that is useful." data-fr="une image qui semble plausible n’est pas automatiquement une image utile."></strong>
+      </p>
+      <p data-en="This study explores that gap by comparing pixel fidelity, perceptual similarity, and downstream pedestrian detection as the amount of paired training data decreases." data-fr="Cette étude explore cet écart en comparant la fidélité pixel, la similarité perceptuelle et la détection de piétons en aval, à mesure que la quantité de paires d’entraînement diminue."></p>
+      <p class="punch" data-en="Pretty is not the same as useful." data-fr="Joli n’est pas la même chose qu’utile."></p>
+    </div>
+  </section>
+
+  <section class="section" id="rgb">
+    <p class="index">01</p>
+    <h2 data-en="We see in RGB" data-fr="Nous voyons en RVB"></h2>
+    <div class="prose">
+      <p data-en="Most machine perception starts from an ordinary camera. The image is dense, cheap, and full of texture. That is the modality we already know how to collect." data-fr="La plupart de la perception automatique part d’une caméra ordinaire. L’image est dense, peu coûteuse, et pleine de texture. C’est la modalité que l’on sait déjà collecter."></p>
+    </div>
+  </section>
+
+  <section class="section" id="limit">
+    <p class="index">02</p>
+    <h2 data-en="Until RGB cannot see enough" data-fr="Jusqu’à ce que le RVB ne voie plus assez"></h2>
+    <div class="prose">
+      <p data-en="Under weak light, visible texture thins out. A person can remain in the scene after the colour image has lost them. Thermal sensing is a different measurement of that same place, not a universally better photograph." data-fr="Sous faible lumière, la texture visible s’amincit. Une personne peut rester dans la scène alors que l’image couleur l’a perdue. La mesure thermique est une autre mesure du même lieu, pas une photographie universellement meilleure."></p>
+    </div>
+  </section>
+
+  <section class="section" id="pair">
+    <p class="index">03</p>
+    <h2 data-en="Same scene. Different sensor." data-fr="Même scène. Autre capteur."></h2>
+    <div class="compare">
+      <div class="slider">
+        <div class="pane rgb" id="pane-rgb"></div>
+        <div class="pane ir" id="pane-ir"></div>
+        <div class="divider" id="divider" style="left:50%" aria-hidden="true"></div>
+      </div>
+      <input id="split" type="range" min="0" max="100" value="50">
+      <div class="compare-labels">
+        <span data-en="Visible" data-fr="Visible"></span>
+        <span data-en="Real infrared" data-fr="Infrarouge réel"></span>
+      </div>
+    </div>
+    <p class="note" data-en="One LLVIP test frame. Drag to compare the visible image with the aligned infrared image. The infrared side is the real capture, not a generated one." data-fr="Une image de test LLVIP. Faites glisser pour comparer l’image visible et l’infrarouge aligné. Le côté infrarouge est la capture réelle, pas une image générée."></p>
+  </section>
+
+  <section class="section" id="catch">
+    <p class="index">04</p>
+    <h2 data-en="The paired set is the scarce one" data-fr="Le jeu apparié est le jeu rare"></h2>
+    <div class="prose">
+      <p id="dataset-intro"></p>
+      <p id="dataset-counts"></p>
+    </div>
+  </section>
+
+  <section class="section" id="generate">
+    <p class="index">05</p>
+    <h2 data-en="Can we generate what is missing?" data-fr="Peut-on générer ce qui manque ?"></h2>
+    <div class="arch" id="arch">
+      <div data-en="RGB image" data-fr="Image RVB"></div>
+      <div class="arrow" aria-hidden="true">↓</div>
+      <div data-en="Conditional model" data-fr="Modèle conditionnel"></div>
+      <div class="arrow" aria-hidden="true">↓</div>
+      <div data-en="Synthetic infrared" data-fr="Infrarouge synthétique"></div>
+    </div>
+    <div class="prose">
+      <p data-en="The baseline is an L1 U-Net. The main model is a small conditional diffusion network: the RGB image is concatenated with the noisy infrared image, and the network predicts the noise. It is trained from the pairs. It is not a photographic foundation model." data-fr="La référence est un U-Net L1. Le modèle principal est un petit réseau de diffusion conditionnel : l’image RVB est concaténée à l’infrarouge bruité, et le réseau prédit le bruit. Il est entraîné sur les paires. Ce n’est pas un modèle de fondation photographique."></p>
+    </div>
+  </section>
+
+  <section class="section" id="pictures">
+    <p class="index">06</p>
+    <h2 data-en="Now remove the data" data-fr="On retire maintenant les données"></h2>
+    <div class="prose">
+      <p data-en="The test set stays fixed. A single random permutation is drawn with seed 42, and the smaller training lists are nested prefixes of that same permutation: 1% ⊂ 5% ⊂ 20% ⊂ 100%. The control below reads only the exported record for that fraction. Each panel is RGB, then the generated infrared, then the real infrared." data-fr="Le jeu de test reste fixe. Une seule permutation aléatoire est tirée avec la graine 42, et les listes d’entraînement plus petites sont des préfixes emboîtés de cette permutation : 1 % ⊂ 5 % ⊂ 20 % ⊂ 100 %. Le contrôle ci-dessous ne lit que l’enregistrement exporté pour cette fraction. Chaque panneau montre le RVB, puis l’infrarouge généré, puis l’infrarouge réel."></p>
+    </div>
+    <div class="fractions" id="fractions" role="group"></div>
+    <div id="evidence"></div>
+  </section>
+
+  <section class="section" id="useful">
+    <p class="index">07</p>
+    <h2 data-en="Pretty is not the same as useful" data-fr="Joli n’est pas la même chose qu’utile"></h2>
+    <dl class="protocol" id="protocol"></dl>
+    <p class="note" data-en="One training run per fraction, seed 42. These results are an independent case study, not a multi-seed benchmark." data-fr="Une exécution d’entraînement par fraction, graine 42. Ces résultats sont une étude de cas indépendante, pas un banc d’essai à plusieurs graines."></p>
+    <div class="prose">
+      <p data-en="PSNR and SSIM measure agreement with the aligned infrared target. LPIPS measures perceptual distance. Pedestrian AP asks a different question: whether the generated infrared remains useful to a detector trained on real infrared." data-fr="Le PSNR et le SSIM mesurent l’accord avec l’infrarouge cible aligné. Le LPIPS mesure une distance perceptuelle. L’AP piéton pose une autre question : l’infrarouge généré reste-t-il utile à un détecteur entraîné sur l’infrarouge réel ?"></p>
+      <p id="finding"></p>
+      <p data-en="The result is not one notion of quality. Pixel error, perceptual similarity, and downstream detection can tell different stories." data-fr="Le résultat n’est pas une seule notion de qualité. L’erreur pixel, la similarité perceptuelle et la détection en aval peuvent raconter des histoires différentes."></p>
+      <p data-en="The U-Net is a supervised L1 reference trained on the full training set. Data-scarcity ablations were performed only with the diffusion model." data-fr="Le U-Net est une référence L1 supervisée, entraînée sur tout le jeu d’entraînement. Les ablations de rareté n’ont été faites que pour le modèle de diffusion."></p>
+    </div>
+    <figure class="trajectories">
+      <div class="panels" id="chart"></div>
+      <figcaption class="note" data-en="Diffusion only. Each panel starts at zero and has its own vertical scale. The horizontal axis is the training fraction." data-fr="Diffusion seulement. Chaque panneau part de zéro et a sa propre échelle verticale. L’axe horizontal est la fraction d’entraînement."></figcaption>
+    </figure>
+    <div class="table-wrap">
+      <p class="note" id="table-note" data-en="Same 3,463 test images. Higher PSNR, SSIM, and AP are better. Lower LPIPS is closer." data-fr="Mêmes 3 463 images de test. Un PSNR, un SSIM et une AP plus hauts sont meilleurs. Un LPIPS plus bas est plus proche."></p>
+      <table class="results" id="results"></table>
+    </div>
+    <div class="caveat">
+      <p class="kicker" data-en="Evaluation caveat" data-fr="Limite d’évaluation"></p>
+      <p data-en="Synthetic infrared is generated at 128×128, while LLVIP infrared is captured at 1280×1024. Both are subsequently placed on a canvas whose long side is 320 pixels. That shared canvas does not make their information content equivalent. The resolution mismatch may explain a substantial part of the gap between real and synthetic AP. Comparisons among the diffusion fractions use the same 128×128 generation pipeline, so they share this limit." data-fr="L’infrarouge synthétique est produit en 128×128, alors que l’infrarouge LLVIP est capturé en 1280×1024. Les deux sont ensuite placés sur un canevas dont le grand côté fait 320 pixels. Ce canevas commun ne rend pas leur contenu d’information équivalent. L’écart de résolution peut expliquer une grande partie de la différence d’AP entre réel et synthétique. Les comparaisons entre fractions de diffusion utilisent le même pipeline de génération en 128×128, donc elles partagent cette limite."></p>
+      <p data-en="Under this evaluation protocol, the generated infrared is not useful to the frozen pedestrian detector." data-fr="Sous ce protocole d’évaluation, l’infrarouge généré n’est pas utile au détecteur de piétons gelé."></p>
+    </div>
+  </section>
+
+  <section class="section" id="failures">
+    <p class="index">08</p>
+    <h2 data-en="The hardest test frames" data-fr="Les images de test les plus difficiles"></h2>
+    <div class="prose">
+      <p data-en="These are the test pairs with the largest generated-versus-real infrared error, ranked by mean absolute error on the 128×128 frames. The generated predictions themselves are not displayed here." data-fr="Ce sont les paires de test dont l’erreur entre infrarouge généré et infrarouge réel est la plus grande, classées par erreur absolue moyenne sur les images 128×128. Les prédictions générées ne sont pas affichées ici."></p>
+    </div>
+    <div class="failure-grid" id="scenes"></div>
+    <div class="rank-list" id="ranks"></div>
+    <p class="note" data-en="The sentences describe the real pair. They do not say what the model drew." data-fr="Les phrases décrivent la paire réelle. Elles ne disent pas ce que le modèle a dessiné."></p>
+  </section>
+
+  <section class="section">
+    <p class="index">09</p>
+    <h2 data-en="What this study does not contain" data-fr="Ce que cette étude ne contient pas"></h2>
+    <div class="prose">
+      <p data-en="The study does not test whether synthetic infrared would help train a detector. Flow matching and video were not run. The next measurement is a resolution-matched control: downsample real infrared to 128×128, pass it through the same canvas as the generated images, and score the same frozen detector." data-fr="L’étude ne teste pas si l’infrarouge synthétique aiderait à entraîner un détecteur. Le flow matching et la vidéo n’ont pas été exécutés. La prochaine mesure est un contrôle à résolution égale : réduire l’infrarouge réel à 128×128, le passer par le même canevas que les images générées, et scorer le même détecteur gelé."></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="index">10</p>
+    <h2 data-en="What this case study establishes" data-fr="Ce que cette étude de cas établit"></h2>
+    <div class="prose">
+      <p data-en="Under a fixed LLVIP test set and a controlled nested reduction of paired training data, PSNR, SSIM, LPIPS, and pedestrian AP do not degrade in the same way. PSNR stays relatively stable, while structural and perceptual metrics deteriorate and detector performance on the generated images approaches zero." data-fr="Sur un jeu de test LLVIP fixe et une réduction emboîtée contrôlée des paires d’entraînement, le PSNR, le SSIM, le LPIPS et l’AP piéton ne se dégradent pas de la même façon. Le PSNR reste relativement stable, tandis que les métriques de structure et de perception se détériorent et que la performance du détecteur sur les images générées tend vers zéro."></p>
+      <p data-en="The downstream result should be read with the resolution caveat above. Synthetic infrared is generated at a much lower resolution than the original LLVIP captures. A resolution-matched control is the next experiment." data-fr="Le résultat en aval doit être lu avec la limite de résolution ci-dessus. L’infrarouge synthétique est généré à une résolution bien plus basse que les captures LLVIP d’origine. Un contrôle à résolution égale est la prochaine expérience."></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="index">11</p>
+    <h2 data-en="Reproducibility" data-fr="Reproductibilité"></h2>
+    <div class="prose">
+      <p data-en="Seed 42. Validation is cut once from the official LLVIP training list. The 1% list is a prefix of the 5% list, which is a prefix of the 20% list. Diffusion uses 30 epochs at every fraction, so the smaller lists receive fewer optimizer steps. The U-Net reference uses 20 epochs on the full training list. Scores on this page come from the result archives through scripts/export_web_results.py." data-fr="Graine 42. La validation est coupée une fois dans la liste d’entraînement officielle de LLVIP. La liste à 1 % est un préfixe de la liste à 5 %, qui est un préfixe de la liste à 20 %. Le diffusion utilise 30 époques à chaque fraction, donc les listes plus petites reçoivent moins de pas d’optimisation. La référence U-Net utilise 20 époques sur toute la liste d’entraînement. Les scores de cette page viennent des archives de résultats via scripts/export_web_results.py."></p>
+    </div>
+  </section>
+
+  <script src="main.js"></script>
+</body>
+</html>
